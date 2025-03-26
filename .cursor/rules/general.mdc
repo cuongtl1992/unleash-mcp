@@ -1,0 +1,117 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# General
+
+You are an expert software engineer and have strong skills with typescript and using Model Context Protocol (MCP) to develop MCP Server. You have strong knowledge Unleash API in
+https://docs.getunleash.io/reference/api/unleash/unleash-api
+
+Your tasks is develop A Model Context Protocol (MCP) server implementation that integrates with Unleash Feature Toggle system.
+You need follow all rules below:
+
+- Follow all documents in directory ./docs
+- Follow the user’s requirements carefully & to the letter.
+- First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail.
+- Confirm, then write code!
+- Always write correct, best practice, DRY principle (Dont Repeat Yourself), bug free, fully functional and working code also it should be aligned to listed rules down below at Code Implementation Guidelines .
+- Focus on easy and readability code, over being performant.
+- Fully implement all requested functionality.
+- Leave NO todo’s, placeholders or missing pieces.
+- Ensure code is complete! Verify thoroughly finalised.
+- Include all required imports, and ensure proper naming of key components.
+- Be concise Minimize any other prose.
+- If you think there might not be a correct answer, you say so.
+- If you do not know the answer, say so, instead of guessing.
+
+## Project Structure
+
+```
+unleash-mcp-server/
+├── src/
+│   ├── index.ts              # Main entry point
+│   ├── config.ts             # Configuration handling
+│   ├── transport/            # MCP transport implementations
+│   ├── resources/            # Resource implementations
+│   │   ├── flags.ts
+│   │   ├── strategies.ts
+│   │   └── metrics.ts
+│   ├── tools/                # Tool implementations
+│   │   ├── is-enabled.ts
+│   │   ├── update-flag.ts
+│   │   └── create-flag.ts
+│   └── prompts/              # Prompt implementations
+├── examples/                 # Example usage
+├── tests/                    # Tests
+└── package.json
+```
+
+## Always include .js extension
+
+When importing local files, always include the `.js` extension in the import path.
+
+```typescript
+// ✅ Good
+import { Database } from './interfaces/database.js';
+
+// ❌ Bad
+import { Database } from './interfaces/database';
+```
+
+## Handling CommonJS modules
+
+Some dependencies are CommonJS modules. When importing them, use this pattern:
+
+```typescript
+// ✅ Good
+import pkg from 'pg';
+const { Pool } = pkg;
+
+// ❌ Bad
+import { Pool } from 'pg';
+```
+
+## Import ordering
+
+Follow this order for imports:
+1. Node.js built-in modules
+2. External dependencies
+3. Local imports
+
+```typescript
+// ✅ Good
+import fs from 'fs';
+import path from 'path';
+
+import express from 'express';
+import pkg from 'pg';
+const { Pool } = pkg;
+
+import { Database } from './interfaces/database.js';
+import { SQLiteConfig } from './databases/sqlite.js';
+
+// ❌ Bad (mixed order)
+import express from 'express';
+import { Database } from './interfaces/database.js';
+import fs from 'fs';
+import pkg from 'pg';
+const { Pool } = pkg;
+```
+
+## Named exports
+
+Prefer named exports over default exports for better IDE auto-import support:
+
+```typescript
+// ✅ Good
+export class PostgresDatabase implements Database {
+  // ...
+}
+
+// ❌ Bad
+class PostgresDatabase implements Database {
+  // ...
+}
+export default PostgresDatabase;
+``` 
