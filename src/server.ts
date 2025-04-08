@@ -5,10 +5,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { flagResources } from './resources/flags.js';
 import { getFlagTool } from './tools/get-flag.js';
+import { listFlags } from './tools/list-flags.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
 import { getProjects } from "./tools/get-projects.js";
+import { logger } from "./logger.js";
 
 /**
  * Create and configure an Unleash MCP server
@@ -16,7 +18,7 @@ import { getProjects } from "./tools/get-projects.js";
  * @returns The configured MCP server instance
  */
 export function createMcpServer(): McpServer {
-  console.log('Creating Unleash MCP Server...');
+  logger.log('Creating Unleash MCP Server...');
   
   // Create new MCP server
   const server = new McpServer({
@@ -36,13 +38,21 @@ export function createMcpServer(): McpServer {
   // Register tools
   server.tool(
     getFlagTool.name,
+    getFlagTool.description,
     getFlagTool.paramsSchema as any,
     getFlagTool.handler as any
   );
 
   server.tool(
     getProjects.name,
+    getProjects.description,
     getProjects.handler as any
+  );
+  
+  server.tool(
+    listFlags.name,
+    listFlags.description,
+    listFlags.handler as any
   );
   
   // Register prompts

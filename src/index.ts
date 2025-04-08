@@ -6,7 +6,7 @@ import { config } from './config.js';
 import { createMcpServer } from './server.js';
 import { startStdioTransport } from './transport/stdio.js';
 import { startHttpTransport } from './transport/http.js';
-
+import { logger } from './logger.js';
 /**
  * Start the Unleash MCP Server
  */
@@ -22,21 +22,18 @@ async function main() {
       await startStdioTransport(server);
     }
     
-    console.log('Unleash MCP Server started successfully');
+    logger.log('Unleash MCP Server started successfully');
     
     // Handle graceful shutdown
     process.on('SIGINT', () => {
-      console.log('Shutting down Unleash MCP Server...');
       process.exit(0);
     });
     
     process.on('SIGTERM', () => {
-      console.log('Shutting down Unleash MCP Server...');
       process.exit(0);
     });
     
   } catch (error) {
-    console.error('Failed to start Unleash MCP Server:', error);
     process.exit(1);
   }
 }

@@ -33,5 +33,6 @@ async function handleGetProjects() {
 
 export const getProjects = {
   name: 'getProjects',
+  description: 'Get a list of all projects',
   handler: handleGetProjects,
 };

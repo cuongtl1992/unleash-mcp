@@ -4,6 +4,7 @@
 
 import dotenv from 'dotenv';
 import { z } from 'zod';
+import { logger } from './logger.js';
 
 // Load environment variables
 dotenv.config();
@@ -42,7 +43,7 @@ function loadConfig(): Config {
     // Validate and return configuration
     return ConfigSchema.parse(filteredConfig);
   } catch (error) {
-    console.error('Invalid configuration:', error);
+    logger.error('Invalid configuration:', error);
     process.exit(1);
   }
 }

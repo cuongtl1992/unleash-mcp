@@ -4,6 +4,7 @@
 
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { logger } from '../logger.js';
 
 /**
  * Create and connect a stdio transport to the MCP server
@@ -12,7 +13,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
  * @returns Promise that resolves when connected
  */
 export async function startStdioTransport(server: McpServer): Promise<void> {
-  console.log('Starting Unleash MCP Server with stdio transport');
+  logger.log('Starting Unleash MCP Server with stdio transport');
   
   // Create stdio transport
   const transport = new StdioServerTransport();
@@ -20,11 +21,10 @@ export async function startStdioTransport(server: McpServer): Promise<void> {
   // Connect to the server
   await server.connect(transport);
   
-  console.log('Stdio transport connected');
+  logger.log('Stdio transport connected');
   
   // Handle process termination
   process.on('SIGINT', () => {
-    console.log('Stdio transport disconnected');
     process.exit(0);
   });
 }

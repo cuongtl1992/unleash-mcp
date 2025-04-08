@@ -65,6 +65,7 @@ export async function handleGetFlag({ flagName }: { flagName: string }) {
  */
 export const getFlagTool = {
   name: "getFlag",
+  description: "Get detailed information about a feature flag",
   paramsSchema: GetFlagParamsSchema,
   handler: handleGetFlag
 }; 

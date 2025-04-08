@@ -7,7 +7,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import express from 'express';
 import cors from 'cors';
 import { config } from '../config.js';
-
+import { logger } from '../logger.js';
 /**
  * Create and start HTTP server with SSE transport
  * 
@@ -15,7 +15,7 @@ import { config } from '../config.js';
  * @returns Promise that resolves when the server is started
  */
 export async function startHttpTransport(server: McpServer): Promise<void> {
-  console.log(`Starting Unleash MCP HTTP Server on port ${config.httpPort}`);
+  logger.log(`Starting Unleash MCP HTTP Server on port ${config.httpPort}`);
   
   // Create express application
   const app = express();
@@ -44,7 +44,7 @@ export async function startHttpTransport(server: McpServer): Promise<void> {
     
     res.on('close', () => {
       delete transports[transport.sessionId];
-      console.log(`Client disconnected: ${transport.sessionId}`);
+      logger.log(`Client disconnected: ${transport.sessionId}`);
     });
     
     await server.connect(transport);
@@ -63,12 +63,11 @@ export async function startHttpTransport(server: McpServer): Promise<void> {
   
   // Start the HTTP server
   app.listen(config.httpPort, () => {
-    console.log(`HTTP server listening on port ${config.httpPort}`);
+    logger.log(`HTTP server listening on port ${config.httpPort}`);
   });
   
   // Handle process termination
   process.on('SIGINT', () => {
-    console.log('HTTP server shutting down');
     process.exit(0);
   });
 }

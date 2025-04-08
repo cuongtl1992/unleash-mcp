@@ -12,13 +12,13 @@ Your tasks is develop A Model Context Protocol (MCP) server implementation that 
 You need follow all rules below:
 
 - Follow all documents in directory ./docs
-- Follow the user’s requirements carefully & to the letter.
+- Follow the user's requirements carefully & to the letter.
 - First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail.
 - Confirm, then write code!
 - Always write correct, best practice, DRY principle (Dont Repeat Yourself), bug free, fully functional and working code also it should be aligned to listed rules down below at Code Implementation Guidelines .
 - Focus on easy and readability code, over being performant.
 - Fully implement all requested functionality.
-- Leave NO todo’s, placeholders or missing pieces.
+- Leave NO todo's, placeholders or missing pieces.
 - Ensure code is complete! Verify thoroughly finalised.
 - Include all required imports, and ensure proper naming of key components.
 - Be concise Minimize any other prose.
@@ -114,4 +114,26 @@ class PostgresDatabase implements Database {
   // ...
 }
 export default PostgresDatabase;
-``` 
+```
+
+## Logging
+
+Always use the logger from `./src/logger.ts` instead of directly using console methods. The logger provides consistent formatting, timestamps, and log levels.
+
+```typescript
+// ✅ Good
+import { logger } from './logger.js';
+
+logger.info('Processing request', { requestId });
+logger.error('Error occurred', error);
+
+// ❌ Bad
+console.log('Processing request', { requestId });
+console.error('Error occurred', error);
+```
+
+Available logger methods:
+- `logger.log()`: For general logging
+- `logger.info()`: For informational messages
+- `logger.warn()`: For warnings
+- `logger.error()`: For errors

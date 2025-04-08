@@ -1,3 +1,4 @@
+import { logger } from '../logger.js';
 import { client } from './unleash-client.js';
 
 /**
@@ -8,10 +9,10 @@ import { client } from './unleash-client.js';
 export async function getFeatureFlag(flagName: string): Promise<any | null> {
   try {
     const response = await client.get(`/api/client/features/${flagName}`);
-    console.log(response);
+    logger.log(response);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching feature flag ${flagName}:`, error);
+    logger.error(`Error fetching feature flag ${flagName}:`, error);
     return null;
   }
 }
