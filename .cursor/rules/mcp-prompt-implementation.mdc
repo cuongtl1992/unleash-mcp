@@ -1,0 +1,95 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Prompt Implementation Guidelines
+
+When implementing new Model Context Protocol (MCP) prompts for the Unleash MCP Server, follow these patterns:
+
+## Structure
+
+Each MCP prompt file should contain:
+
+1. A parameter schema using Zod for validation
+2. A handler function that processes inputs and returns formatted messages
+3. An exported prompt definition object
+
+## Naming Convention
+
+- File name: `feature-name.ts` (kebab-case)
+- Schema: `FeatureNameParamsSchema` (PascalCase + ParamsSchema suffix)
+- Handler: `handleFeatureNamePrompt` (handle + PascalCase + Prompt suffix)
+- Export: `featureNamePrompt` (camelCase + Prompt suffix)
+
+## Implementation Template
+
+```typescript
+/**
+ * Brief description of the prompt purpose
+ */
+
+import { z } from 'zod';
+
+/**
+ * Define any needed schemas for validation
+ */
+const RequiredDataSchema = z.object({
+  // Add properties with appropriate Zod validators
+  property: z.string(),
+  optionalProperty: z.number().optional()
+}).passthrough();
+
+/**
+ * Parameters schema for this prompt
+ */
+export const FeatureNameParamsSchema = {
+  requiredParam: z.string(),
+  optionalData: RequiredDataSchema.optional()
+};
+
+/**
+ * Handler for this prompt
+ */
+export function handleFeatureNamePrompt({ 
+  requiredParam, 
+  optionalData = {} 
+}: { 
+  requiredParam: string; 
+  optionalData?: any 
+}) {
+  return {
+    messages: [{
+      role: "user",
+      content: {
+        type: "text",
+        text: `Prompt text that uses ${requiredParam} and:
+${JSON.stringify(optionalData, null, 2)}
+
+Instructions for the AI on how to respond, including which tools to use.`
+      }
+    }]
+  };
+}
+
+/**
+ * Prompt definition export
+ */
+export const featureNamePrompt = {
+  name: "descriptiveName",
+  paramsSchema: FeatureNameParamsSchema,
+  handler: handleFeatureNamePrompt
+};
+```
+
+## Best Practices
+
+1. Use Zod for all parameter validation
+2. Include clear JSDoc comments
+3. Format multi-line strings with template literals
+4. Provide default values for optional parameters
+5. Use proper TypeScript typing for handler parameters
+6. Format JSON with indentation for readability
+7. Include instructions for tool usage in the prompt text
+8. Export only the final prompt definition object
+9. Follow the project structure for importing dependencies

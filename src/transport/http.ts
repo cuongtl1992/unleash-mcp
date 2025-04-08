@@ -4,24 +4,22 @@
 
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
-import { Config } from '../config.js';
+import { config } from '../config.js';
 
 /**
  * Create and start HTTP server with SSE transport
  * 
  * @param server The MCP server instance
- * @param config Configuration options
  * @returns Promise that resolves when the server is started
  */
-export async function startHttpTransport(server: McpServer, config: Config): Promise<void> {
+export async function startHttpTransport(server: McpServer): Promise<void> {
   console.log(`Starting Unleash MCP HTTP Server on port ${config.httpPort}`);
   
   // Create express application
   const app = express();
   app.use(cors());
-  app.use(express.json());
   
   // Track active transports
   const transports: { [sessionId: string]: SSEServerTransport } = {};
@@ -36,8 +34,12 @@ export async function startHttpTransport(server: McpServer, config: Config): Pro
   });
   
   // SSE endpoint for connecting to the MCP server
-  app.get(`${config.httpPath}/sse`, (_, res) => {
-    const transport = new SSEServerTransport(`${config.httpPath}/messages`, res);
+  app.get(`/sse`, async (_, res) => {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+
+    const transport = new SSEServerTransport(`/messages`, res);
     transports[transport.sessionId] = transport;
     
     res.on('close', () => {
@@ -45,20 +47,13 @@ export async function startHttpTransport(server: McpServer, config: Config): Pro
       console.log(`Client disconnected: ${transport.sessionId}`);
     });
     
-    server.connect(transport)
-      .then(() => {
-        console.log(`Client connected: ${transport.sessionId}`);
-      })
-      .catch(error => {
-        console.error(`Error connecting client ${transport.sessionId}:`, error);
-      });
+    await server.connect(transport);
   });
   
   // Message endpoint for receiving client messages
-  app.post(`${config.httpPath}/messages`, async (req, res) => {
+  app.post(`/messages`, async (req, res) => {
     const sessionId = req.query.sessionId as string;
     const transport = transports[sessionId];
-    
     if (transport) {
       await transport.handlePostMessage(req, res);
     } else {

@@ -1,0 +1,95 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Resource Implementation Guidelines
+
+When implementing new MCP resources, follow these consistent patterns to maintain code quality and readability:
+
+## File Structure
+- Place all MCP resource implementations in the `src/resources/` directory
+- Use kebab-case for filenames (e.g., `flags.ts`, `strategies.ts`)
+- Group related resources in the same file
+
+## Handler Implementation Pattern
+1. Create handler functions with the naming convention `handle[ResourceName]`:
+```typescript
+export async function handle[ResourceName](mdc:uri: URL, params?: any) {
+  try {
+    const result = await apiFunction(params);
+    
+    return {
+      contents: [{
+        uri: uri.href,
+        text: JSON.stringify(result, null, 2)
+      }]
+    };
+  } catch (error: any) {
+    return {
+      contents: [{
+        uri: uri.href,
+        text: JSON.stringify({ error: error.message })
+      }]
+    };
+  }
+}
+```
+
+2. Always include parameter validation and error handling for specific cases:
+```typescript
+if (!result) {
+  return {
+    contents: [{
+      uri: uri.href,
+      text: JSON.stringify({ error: `Resource '${paramName}' not found` })
+    }]
+  };
+}
+```
+
+3. Export resources array for registration:
+```typescript
+export const resourceName = [
+  {
+    name: "resource-list",
+    template: "unleash://resource-path",
+    handler: handleResourceList
+  },
+  {
+    name: "resource-details",
+    template: new ResourceTemplate("unleash://resource-path/{paramName}", { list: undefined }),
+    handler: handleResourceDetails
+  }
+];
+```
+
+## Response Format
+- Always return responses in this consistent format:
+```typescript
+{
+  contents: [{
+    uri: uri.href,
+    text: JSON.stringify(result, null, 2)
+  }]
+}
+```
+
+## Error Handling
+- Wrap all API calls in try/catch blocks
+- Return standardized error responses:
+```typescript
+{
+  contents: [{
+    uri: uri.href,
+    text: JSON.stringify({ error: error.message })
+  }]
+}
+```
+
+## Template URI Structure
+- Use consistent URI patterns: `unleash://<resource-type>[/<resource-id>]`
+- For parameterized templates, use `ResourceTemplate` class with proper typing
+- Include `list: undefined` for detail resources to prevent listing behavior
+
+By following these guidelines, you'll maintain consistency across all MCP resource implementations in the project.

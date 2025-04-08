@@ -3,27 +3,15 @@
  */
 
 import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { 
-  getAllFeatureFlags, 
-  getFeatureFlag, 
-  isUnleashClientReady 
-} from '../utils/unleash-client.js';
+import { getAllFeatureFlags } from "../unleash/get-all-feature-flags.js";
+import { getFeatureFlag } from "../unleash/get-feature-flag.js";
 
 /**
  * Resource handler for listing all feature flags
  */
 export async function handleFlagsList(uri: URL) {
   try {
-    if (!isUnleashClientReady()) {
-      return {
-        contents: [{
-          uri: uri.href,
-          text: JSON.stringify({ error: "Unleash client not ready" })
-        }]
-      };
-    }
-
-    const features = getAllFeatureFlags();
+    const features = await getAllFeatureFlags();
     
     return {
       contents: [{
@@ -46,17 +34,8 @@ export async function handleFlagsList(uri: URL) {
  */
 export async function handleFlagDetails(uri: URL, { flagName }: { flagName: string }) {
   try {
-    if (!isUnleashClientReady()) {
-      return {
-        contents: [{
-          uri: uri.href,
-          text: JSON.stringify({ error: "Unleash client not ready" })
-        }]
-      };
-    }
+    const feature = await getFeatureFlag(flagName);
 
-    const feature = getFeatureFlag(flagName);
-    
     if (!feature) {
       return {
         contents: [{

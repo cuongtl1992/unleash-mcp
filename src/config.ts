@@ -12,41 +12,25 @@ dotenv.config();
 const ConfigSchema = z.object({
   // Unleash configuration
   unleashUrl: z.string().url(),
-  unleashToken: z.string(),
-  appName: z.string().default('unleash-mcp-server'),
-  instanceId: z.string().optional(),
-  refreshInterval: z.number().positive().default(15000),
-  metricsInterval: z.number().positive().default(60000),
+  apiToken: z.string(),
   
   // MCP configuration
   transport: z.enum(['stdio', 'http']).default('stdio'),
-  httpPort: z.number().positive().default(3000),
-  httpPath: z.string().default('/mcp'),
+  httpPort: z.number().positive().default(3001)
 });
-
-export type Config = z.infer<typeof ConfigSchema>;
 
 /**
  * Load and validate configuration from environment variables
  */
-export function loadConfig(): Config {
+function loadConfig(): Config {
   // Load from environment variables
   const config = {
     unleashUrl: process.env.UNLEASH_URL,
-    unleashToken: process.env.UNLEASH_API_TOKEN,
-    appName: process.env.UNLEASH_APP_NAME,
-    instanceId: process.env.UNLEASH_INSTANCE_ID,
-    refreshInterval: process.env.UNLEASH_REFRESH_INTERVAL 
-      ? parseInt(process.env.UNLEASH_REFRESH_INTERVAL, 10) 
-      : undefined,
-    metricsInterval: process.env.UNLEASH_METRICS_INTERVAL 
-      ? parseInt(process.env.UNLEASH_METRICS_INTERVAL, 10) 
-      : undefined,
+    apiToken: process.env.UNLEASH_API_TOKEN,
     transport: process.env.MCP_TRANSPORT as 'stdio' | 'http' | undefined,
-    httpPort: process.env.HTTP_PORT 
-      ? parseInt(process.env.HTTP_PORT, 10) 
-      : undefined,
-    httpPath: process.env.HTTP_PATH,
+    httpPort: process.env.MCP_HTTP_PORT 
+      ? parseInt(process.env.MCP_HTTP_PORT, 10) 
+      : 3001
   };
 
   // Filter out undefined values
@@ -62,3 +46,6 @@ export function loadConfig(): Config {
     process.exit(1);
   }
 }
+
+export type Config = z.infer<typeof ConfigSchema>;
+export const config: Config = loadConfig();

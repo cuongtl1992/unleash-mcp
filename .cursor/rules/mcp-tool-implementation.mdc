@@ -1,0 +1,95 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# MCP Tool Implementation Guidelines
+
+When implementing new MCP tools, follow these consistent patterns to maintain code quality and readability:
+
+## File Structure
+- Place all MCP tool implementations in the `src/tools/` directory
+- Use kebab-case for filenames (e.g., `get-projects.ts`, `update-flag.ts`)
+- Name files according to their primary function
+
+## Implementation Pattern
+1. Import any necessary Unleash API integration functions:
+```typescript
+import { requiredFunction } from '../unleash/required-function.js';
+```
+
+2. Create a handler function with the naming convention `handle[ToolName]`:
+```typescript
+async function handle[ToolName](mdc:parameters?: any) {
+  try {
+    const result = await requiredFunction(parameters);
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
+  } catch (error: any) {
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(
+            {
+              success: false,
+              error: error.message,
+            },
+            null,
+            2
+          ),
+        },
+      ],
+      isError: true,
+    };
+  }
+}
+```
+
+3. Export the tool using a consistent structure:
+```typescript
+export const toolName = {
+  name: 'toolName',
+  handler: handle[ToolName],
+};
+```
+
+## Error Handling
+- Always wrap API calls in try/catch blocks
+- Return a standardized error response object when errors occur:
+  - Include `isError: true` flag
+  - Include meaningful error messages
+  - Maintain the consistent content structure
+
+## Response Format
+- Always return responses in the following format:
+```typescript
+{
+  content: [
+    {
+      type: 'text',
+      text: string,
+    },
+    // More content items if needed
+  ],
+  isError?: boolean, // Include only for error responses
+}
+```
+
+## Parameter Handling
+- Define clear parameter types when needed
+- Validate parameters before using them in API calls
+- Handle missing parameters gracefully
+
+## Testing
+- Write unit tests for each tool implementation
+- Test both success and error scenarios
+- Mock any API calls to Unleash in tests
+
+By following these guidelines, you'll maintain consistency across all MCP tool implementations in the project.

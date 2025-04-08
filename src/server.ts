@@ -2,19 +2,13 @@
  * Unleash MCP Server implementation
  */
 
-import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { flagResources } from './resources/flags.js';
-import { metricsResources } from './resources/metrics.js';
-import { strategiesResources } from './resources/strategies.js';
-import { isEnabledTool } from './tools/is-enabled.js';
-import { batchIsEnabledTool } from './tools/batch-is-enabled.js';
-import { updateFlagTool } from './tools/update-flag.js';
-import { createFlagTool } from './tools/create-flag.js';
-import { staleFlagTool } from './tools/stale-flag.js';
 import { getFlagTool } from './tools/get-flag.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
+import { getProjects } from "./tools/get-projects.js";
 
 /**
  * Create and configure an Unleash MCP server
@@ -26,7 +20,7 @@ export function createMcpServer(): McpServer {
   
   // Create new MCP server
   const server = new McpServer({
-    name: "UnleashMCP",
+    name: "Unleash MCP",
     version: "1.0.0"
   });
   
@@ -39,63 +33,20 @@ export function createMcpServer(): McpServer {
     );
   });
   
-  // Register metrics resources
-  metricsResources.forEach(resource => {
-    server.resource(
-      resource.name,
-      resource.template as any,
-      resource.handler as any
-    );
-  });
-  
-  // Register strategies resources
-  strategiesResources.forEach(resource => {
-    server.resource(
-      resource.name,
-      resource.template as any,
-      resource.handler as any
-    );
-  });
-  
   // Register tools
-  server.tool(
-    isEnabledTool.name,
-    isEnabledTool.paramsSchema as any,
-    isEnabledTool.handler as any
-  );
-  
-  server.tool(
-    batchIsEnabledTool.name,
-    batchIsEnabledTool.paramsSchema as any,
-    batchIsEnabledTool.handler as any
-  );
-  
-  server.tool(
-    updateFlagTool.name,
-    updateFlagTool.paramsSchema as any,
-    updateFlagTool.handler as any
-  );
-  
-  server.tool(
-    createFlagTool.name,
-    createFlagTool.paramsSchema as any,
-    createFlagTool.handler as any
-  );
-  
-  server.tool(
-    staleFlagTool.name,
-    staleFlagTool.paramsSchema as any,
-    staleFlagTool.handler as any
-  );
-  
   server.tool(
     getFlagTool.name,
     getFlagTool.paramsSchema as any,
     getFlagTool.handler as any
   );
+
+  server.tool(
+    getProjects.name,
+    getProjects.handler as any
+  );
   
   // Register prompts
-  server.prompt(
+  /*server.prompt(
     flagCheckPrompt.name,
     flagCheckPrompt.paramsSchema as any,
     flagCheckPrompt.handler as any
@@ -111,7 +62,7 @@ export function createMcpServer(): McpServer {
     flagEvaluationPrompt.name, 
     flagEvaluationPrompt.paramsSchema as any,
     flagEvaluationPrompt.handler as any
-  );
+  );*/
   
   return server;
 }
