@@ -48,20 +48,6 @@ The Unleash MCP Server acts as a bridge between LLM applications and the Unleash
 +----------------+      +-------------------+      +----------------+
 ```
 
-## Configuration
-
-Configuration options for the Unleash MCP Server:
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `unleashUrl` | URL of the Unleash API server | - |
-| `unleashToken` | API token for authenticating with Unleash | - |
-| `appName` | Name of the application in Unleash | `unleash-mcp-server` |
-| `refreshInterval` | Interval for polling Unleash API (ms) | `15000` |
-| `metricsInterval` | Interval for sending metrics (ms) | `60000` |
-| `transport` | MCP transport type (stdio, http) | `stdio` |
-| `httpPort` | Port for HTTP transport | `3000` |
-
 ## Development
 
 ### Project Structure
