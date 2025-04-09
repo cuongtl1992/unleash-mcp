@@ -5,6 +5,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { flagResources } from './resources/flags.js';
 import { featureTypeResources } from './resources/feature-types.js';
+import { projectFeaturesResources } from './resources/project-features.js';
 import { getFlagTool } from './tools/get-flag.js';
 import { listFlags } from './tools/list-flags.js';
 import { getFeatureTypes } from './tools/get-feature-types.js';
@@ -16,6 +17,9 @@ import { addStrategyTool } from './tools/add-strategy.js';
 import { enableFlagTool } from './tools/enable-flag.js';
 import { disableFlagTool } from './tools/disable-flag.js';
 import { markFeaturesStaleTool } from './tools/mark-features-stale.js';
+import { deleteStrategyTool } from './tools/delete-strategy.js';
+import { setStrategySortOrderTool } from './tools/set-strategy-sort-order.js';
+import { getProjectFeaturesTool } from './tools/get-project-features.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -47,6 +51,15 @@ export function createMcpServer(): McpServer {
 
   // Register feature type resources
   featureTypeResources.forEach(resource => {
+    server.resource(
+      resource.name,
+      resource.template as any,
+      resource.handler as any
+    );
+  });
+  
+  // Register project features resources
+  projectFeaturesResources.forEach(resource => {
     server.resource(
       resource.name,
       resource.template as any,
@@ -95,6 +108,27 @@ export function createMcpServer(): McpServer {
     updateStrategyTool.description,
     updateStrategyTool.paramsSchema as any,
     updateStrategyTool.handler as any
+  );
+
+  server.tool(
+    deleteStrategyTool.name,
+    deleteStrategyTool.description,
+    deleteStrategyTool.paramsSchema as any,
+    deleteStrategyTool.handler as any
+  );
+  
+  server.tool(
+    setStrategySortOrderTool.name,
+    setStrategySortOrderTool.description,
+    setStrategySortOrderTool.paramsSchema as any,
+    setStrategySortOrderTool.handler as any
+  );
+  
+  server.tool(
+    getProjectFeaturesTool.name,
+    getProjectFeaturesTool.description,
+    getProjectFeaturesTool.paramsSchema as any,
+    getProjectFeaturesTool.handler as any
   );
 
   server.tool(
