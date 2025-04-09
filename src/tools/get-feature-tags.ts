@@ -4,17 +4,15 @@ import { getFeatureTags } from '../unleash/get-feature-tags.js';
 /**
  * Parameters schema for getFeatureTags tool
  */
-const getFeatureTagsParamsSchema = z.object({
+const getFeatureTagsParamsSchema = {
   featureName: z.string().min(1).describe('Name of the feature to get tags for')
-});
+};
 
 /**
  * Handler for getting all tags for a feature
  */
-async function handleGetFeatureTags(params: z.infer<typeof getFeatureTagsParamsSchema>) {
+async function handleGetFeatureTags({ featureName }: { featureName: string }) {
   try {
-    const { featureName } = params;
-    
     // Get all tags for the feature
     const tags = await getFeatureTags(featureName);
     

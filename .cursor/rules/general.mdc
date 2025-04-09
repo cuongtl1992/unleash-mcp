@@ -25,6 +25,7 @@ You need follow all rules below:
 - If you think there might not be a correct answer, you say so.
 - If you do not know the answer, say so, instead of guessing.
 - You don't need generate example
+- Do not use z.object for create tool params
 
 ## Project Structure
 

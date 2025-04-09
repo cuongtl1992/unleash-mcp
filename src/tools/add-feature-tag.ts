@@ -4,19 +4,17 @@ import { addFeatureTag } from '../unleash/add-feature-tag.js';
 /**
  * Parameters schema for addFeatureTag tool
  */
-const addFeatureTagParamsSchema = z.object({
+const addFeatureTagParamsSchema = {
   featureName: z.string().min(1).describe('Name of the feature to add the tag to'),
   tagType: z.string().min(1).describe('Type of the tag'),
   tagValue: z.string().min(1).describe('Value of the tag')
-});
+};
 
 /**
  * Handler for adding a tag to a feature
  */
-async function handleAddFeatureTag(params: z.infer<typeof addFeatureTagParamsSchema>) {
+async function handleAddFeatureTag({ featureName, tagType, tagValue }: { featureName: string, tagType: string, tagValue: string }) {
   try {
-    const { featureName, tagType, tagValue } = params;
-    
     // Add tag to the feature
     const success = await addFeatureTag(featureName, tagType, tagValue);
     
