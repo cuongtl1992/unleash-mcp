@@ -19,11 +19,23 @@ export interface UpdateFeatureStrategyParams {
 }
 
 /**
+ * Interface for feature strategy update result
+ */
+export interface UpdateFeatureStrategyResult {
+  success: boolean;
+  data?: any;
+  error?: {
+    code: number;
+    message: string;
+  };
+}
+
+/**
  * Update a strategy configuration for a feature flag in the specified environment
  * @param params Parameters for updating the strategy
- * @returns The updated strategy data or null if update failed
+ * @returns The result of the update operation with status, data, and error information if applicable
  */
-export async function updateFeatureStrategy(params: UpdateFeatureStrategyParams): Promise<any | null> {
+export async function updateFeatureStrategy(params: UpdateFeatureStrategyParams): Promise<UpdateFeatureStrategyResult> {
   try {
     const payload = {
       name: params.name,
@@ -39,9 +51,30 @@ export async function updateFeatureStrategy(params: UpdateFeatureStrategyParams)
     );
     
     logger.info(`Successfully updated strategy for feature flag: ${params.featureName}`);
-    return response.data;
+    return {
+      success: true,
+      data: response.data
+    };
   } catch (error: any) {
-    logger.error(`Error updating strategy for feature flag ${params.featureName}:`, error.response?.data || error.message);
-    return null;
+    const statusCode = error.response?.status;
+    let errorMessage = error.message || 'Unknown error occurred';
+    
+    if (error.response?.data?.message) {
+      errorMessage = error.response.data.message;
+    }
+    
+    logger.error(`Error updating strategy for feature flag ${params.featureName}:`, {
+      statusCode,
+      message: errorMessage,
+      error: error.response?.data || error.message
+    });
+    
+    return {
+      success: false,
+      error: {
+        code: statusCode || 500,
+        message: errorMessage
+      }
+    };
   }
 } 

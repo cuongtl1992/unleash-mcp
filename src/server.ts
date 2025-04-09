@@ -20,6 +20,9 @@ import { markFeaturesStaleTool } from './tools/mark-features-stale.js';
 import { deleteStrategyTool } from './tools/delete-strategy.js';
 import { setStrategySortOrderTool } from './tools/set-strategy-sort-order.js';
 import { getProjectFeaturesTool } from './tools/get-project-features.js';
+import { getProjectFeatureTool } from './tools/get-project-feature.js';
+import { archiveFlagTool } from './tools/archive-flag.js';
+import { validateFeatureNameTool } from './tools/validate-feature-name.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -129,6 +132,27 @@ export function createMcpServer(): McpServer {
     getProjectFeaturesTool.description,
     getProjectFeaturesTool.paramsSchema as any,
     getProjectFeaturesTool.handler as any
+  );
+
+  server.tool(
+    getProjectFeatureTool.name,
+    getProjectFeatureTool.description,
+    getProjectFeatureTool.paramsSchema as any,
+    getProjectFeatureTool.handler as any
+  );
+
+  server.tool(
+    archiveFlagTool.name,
+    archiveFlagTool.description,
+    archiveFlagTool.paramsSchema as any,
+    archiveFlagTool.handler as any
+  );
+
+  server.tool(
+    validateFeatureNameTool.name,
+    validateFeatureNameTool.description,
+    validateFeatureNameTool.paramsSchema as any,
+    validateFeatureNameTool.handler as any
   );
 
   server.tool(
