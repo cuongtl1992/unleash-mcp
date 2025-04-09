@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Full Implementation
+
+Follow [general.mdc](mdc:.cursor/rules/general.mdc) and principals below:
+
+1. Read instructions in @ (document name) to understand the scope of work for this feature.
+2. Use chain of thought reasoning to create a step by step implementation plan.
+3. Ensure you explain how every section of this feature works providing macro-level details.
+4. Break these items into detailed numbered steps.
+
+Your tasks are:
+1. Follow api {{api_name}} document in link {{api_document}} by fetch or access it
+2. Follow [unleash-api-integration.mdc](mdc:.cursor/rules/unleash-api-integration.mdc) to implement function integration with that api if request implement api
+3. Follow [mcp-tool-implementation.mdc](mdc:.cursor/rules/mcp-tool-implementation.mdc) to implement mcp tool to get all feature types if request implement tool
+4. Follow [mcp-resource-implementation.mdc](mdc:.cursor/rules/mcp-resource-implementation.mdc) to implement mcp resource for feature types if request implement resource
+
