@@ -9,6 +9,9 @@ import { getFlagTool } from './tools/get-flag.js';
 import { listFlags } from './tools/list-flags.js';
 import { getFeatureTypes } from './tools/get-feature-types.js';
 import { createFlagTool } from './tools/create-flag.js';
+import { updateFlagTool } from './tools/update-flag.js';
+import { patchFlagTool } from './tools/patch-flag.js';
+import { updateStrategyTool } from './tools/update-strategy.js';
 import { addStrategyTool } from './tools/add-strategy.js';
 import { enableFlagTool } from './tools/enable-flag.js';
 import { disableFlagTool } from './tools/disable-flag.js';
@@ -65,12 +68,33 @@ export function createMcpServer(): McpServer {
     createFlagTool.paramsSchema as any,
     createFlagTool.handler as any
   );
+  
+  server.tool(
+    updateFlagTool.name,
+    updateFlagTool.description,
+    updateFlagTool.paramsSchema as any,
+    updateFlagTool.handler as any
+  );
+  
+  server.tool(
+    patchFlagTool.name,
+    patchFlagTool.description,
+    patchFlagTool.paramsSchema as any,
+    patchFlagTool.handler as any
+  );
 
   server.tool(
     addStrategyTool.name,
     addStrategyTool.description,
     addStrategyTool.paramsSchema as any,
     addStrategyTool.handler as any
+  );
+  
+  server.tool(
+    updateStrategyTool.name,
+    updateStrategyTool.description,
+    updateStrategyTool.paramsSchema as any,
+    updateStrategyTool.handler as any
   );
 
   server.tool(
