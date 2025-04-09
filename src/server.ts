@@ -6,9 +6,13 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { flagResources } from './resources/flags.js';
 import { featureTypeResources } from './resources/feature-types.js';
 import { projectFeaturesResources } from './resources/project-features.js';
+import { environmentResources } from './resources/environments.js';
 import { getFlagTool } from './tools/get-flag.js';
 import { listFlags } from './tools/list-flags.js';
 import { getFeatureTypes } from './tools/get-feature-types.js';
+import { getEnvironments } from './tools/get-environments.js';
+import { getFeatureTagsTool } from './tools/get-feature-tags.js';
+import { addFeatureTagTool } from './tools/add-feature-tag.js';
 import { createFlagTool } from './tools/create-flag.js';
 import { updateFlagTool } from './tools/update-flag.js';
 import { patchFlagTool } from './tools/patch-flag.js';
@@ -63,6 +67,15 @@ export function createMcpServer(): McpServer {
   
   // Register project features resources
   projectFeaturesResources.forEach(resource => {
+    server.resource(
+      resource.name,
+      resource.template as any,
+      resource.handler as any
+    );
+  });
+  
+  // Register environment resources
+  environmentResources.forEach(resource => {
     server.resource(
       resource.name,
       resource.template as any,
@@ -171,6 +184,26 @@ export function createMcpServer(): McpServer {
     getFeatureTypes.name,
     getFeatureTypes.description,
     getFeatureTypes.handler as any
+  );
+  
+  server.tool(
+    getEnvironments.name,
+    getEnvironments.description,
+    getEnvironments.handler as any
+  );
+  
+  server.tool(
+    getFeatureTagsTool.name,
+    getFeatureTagsTool.description,
+    getFeatureTagsTool.paramsSchema as any,
+    getFeatureTagsTool.handler as any
+  );
+  
+  server.tool(
+    addFeatureTagTool.name,
+    addFeatureTagTool.description,
+    addFeatureTagTool.paramsSchema as any,
+    addFeatureTagTool.handler as any
   );
   
   server.tool(
