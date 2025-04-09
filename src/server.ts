@@ -9,6 +9,7 @@ import { getFlagTool } from './tools/get-flag.js';
 import { listFlags } from './tools/list-flags.js';
 import { getFeatureTypes } from './tools/get-feature-types.js';
 import { createFlagTool } from './tools/create-flag.js';
+import { addStrategyTool } from './tools/add-strategy.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -60,6 +61,13 @@ export function createMcpServer(): McpServer {
     createFlagTool.description,
     createFlagTool.paramsSchema as any,
     createFlagTool.handler as any
+  );
+
+  server.tool(
+    addStrategyTool.name,
+    addStrategyTool.description,
+    addStrategyTool.paramsSchema as any,
+    addStrategyTool.handler as any
   );
 
   server.tool(
