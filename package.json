@@ -1,9 +1,10 @@
 {
-  "name": "unleash-mcp-server",
-  "version": "1.0.0",
+  "name": "unleash-mcp",
+  "version": "1.0.2",
   "description": "MCP server implementation for Unleash feature flags integration",
-  "type": "module",
   "main": "dist/index.js",
+  "type": "module",
+  "types": "dist/index.d.ts",
   "bin": {
     "unleash-mcp": "dist/index.js"
   },

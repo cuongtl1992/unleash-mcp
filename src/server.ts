@@ -44,7 +44,7 @@ export function createMcpServer(): McpServer {
   // Create new MCP server
   const server = new McpServer({
     name: "Unleash MCP",
-    version: "1.0.0"
+    version: "1.0.2"
   });
   
   // Register flag resources

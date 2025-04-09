@@ -133,7 +133,7 @@ For Claude or Cursor config:
       "command": "npx",
       "args": [
         "-y",
-        "unleash-mcp-server"
+        "unleash-mcp"
       ],
       "env": {
         "UNLEASH_URL": "YOUR_UNLEASH_END_POINT",

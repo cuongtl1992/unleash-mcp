@@ -1,7 +1,4 @@
-/**
- * Main entry point for Unleash MCP Server
- */
-
+#!/usr/bin/env node
 import { config } from './config.js';
 import { createMcpServer } from './server.js';
 import { startStdioTransport } from './transport/stdio.js';

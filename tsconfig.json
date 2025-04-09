@@ -10,11 +10,9 @@
     "outDir": "dist",
     "declaration": true,
     "sourceMap": true,
-    "resolveJsonModule": true
   },
   "include": [
-    "src/**/*.ts",
-    "typescript-starters/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
