@@ -2,6 +2,10 @@
 
 A Model Context Protocol (MCP) server implementation that integrates with Unleash Feature Toggle system.
 
+<a href="https://glama.ai/mcp/servers/@cuongtl1992/unleash-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@cuongtl1992/unleash-mcp/badge" />
+</a>
+
 ## Overview
 
 This project provides a bridge between LLM applications and Unleash feature flag system using the Model Context Protocol (MCP). It allows AI applications to:
