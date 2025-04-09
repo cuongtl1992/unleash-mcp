@@ -4,8 +4,10 @@
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { flagResources } from './resources/flags.js';
+import { featureTypeResources } from './resources/feature-types.js';
 import { getFlagTool } from './tools/get-flag.js';
 import { listFlags } from './tools/list-flags.js';
+import { getFeatureTypes } from './tools/get-feature-types.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -34,6 +36,15 @@ export function createMcpServer(): McpServer {
       resource.handler as any
     );
   });
+
+  // Register feature type resources
+  featureTypeResources.forEach(resource => {
+    server.resource(
+      resource.name,
+      resource.template as any,
+      resource.handler as any
+    );
+  });
   
   // Register tools
   server.tool(
@@ -53,6 +64,12 @@ export function createMcpServer(): McpServer {
     listFlags.name,
     listFlags.description,
     listFlags.handler as any
+  );
+
+  server.tool(
+    getFeatureTypes.name,
+    getFeatureTypes.description,
+    getFeatureTypes.handler as any
   );
   
   // Register prompts
