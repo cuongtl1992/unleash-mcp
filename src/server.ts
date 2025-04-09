@@ -11,6 +11,8 @@ import { getFeatureTypes } from './tools/get-feature-types.js';
 import { createFlagTool } from './tools/create-flag.js';
 import { addStrategyTool } from './tools/add-strategy.js';
 import { enableFlagTool } from './tools/enable-flag.js';
+import { disableFlagTool } from './tools/disable-flag.js';
+import { markFeaturesStaleTool } from './tools/mark-features-stale.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -94,6 +96,20 @@ export function createMcpServer(): McpServer {
     enableFlagTool.description,
     enableFlagTool.paramsSchema as any,
     enableFlagTool.handler as any
+  );
+  
+  server.tool(
+    disableFlagTool.name,
+    disableFlagTool.description,
+    disableFlagTool.paramsSchema as any,
+    disableFlagTool.handler as any
+  );
+  
+  server.tool(
+    markFeaturesStaleTool.name,
+    markFeaturesStaleTool.description,
+    markFeaturesStaleTool.paramsSchema as any,
+    markFeaturesStaleTool.handler as any
   );
   
   // Register prompts
