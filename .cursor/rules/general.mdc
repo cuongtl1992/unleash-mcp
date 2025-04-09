@@ -24,6 +24,7 @@ You need follow all rules below:
 - Be concise Minimize any other prose.
 - If you think there might not be a correct answer, you say so.
 - If you do not know the answer, say so, instead of guessing.
+- You don't need generate example
 
 ## Project Structure
 
@@ -137,3 +138,119 @@ Available logger methods:
 - `logger.info()`: For informational messages
 - `logger.warn()`: For warnings
 - `logger.error()`: For errors
+
+## Testing
+
+Always use Jest for testing. Follow these guidelines for writing tests:
+
+### Test Organization
+
+Organize tests using describe blocks for logical grouping and test blocks for individual test cases:
+
+```typescript
+// ✅ Good
+describe('Create Feature Flag API', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('createFeatureFlag should create a feature flag', async () => {
+    // Test implementation
+  });
+
+  test('createFeatureFlag should handle errors', async () => {
+    // Error handling test
+  });
+});
+```
+
+### Mocking Dependencies
+
+Mock external dependencies to isolate the unit being tested:
+
+```typescript
+// ✅ Good
+// Mock axios
+jest.mock('axios');
+const mockAxios = axios as jest.Mocked<typeof axios>;
+
+// Mock internal modules
+jest.mock('../src/unleash/unleash-client.js', () => ({
+  client: {
+    post: jest.fn()
+  }
+}));
+
+// Mock logger
+jest.mock('../src/logger.js', () => ({
+  logger: {
+    log: jest.fn(),
+    info: jest.fn(),
+    error: jest.fn()
+  }
+}));
+```
+
+### Clean State Between Tests
+
+Reset mocks and clear state between tests:
+
+```typescript
+// ✅ Good
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+```
+
+### Test Both Success and Error Cases
+
+Always test both happy path and error handling:
+
+```typescript
+// ✅ Good
+test('createFeatureFlag should create a feature flag', async () => {
+  // Setup mock response for success case
+  const mockResponse = { /* success data */ };
+  client.post.mockResolvedValue(mockResponse);
+  
+  // Test success case
+});
+
+test('createFeatureFlag should handle errors', async () => {
+  // Setup mock for error case
+  client.post.mockRejectedValue(new Error('API error'));
+  
+  // Test error handling
+});
+```
+
+### Testing Tool Handlers
+
+For MCP tool handlers, verify both the response structure and content:
+
+```typescript
+// ✅ Good
+test('handleCreateFlag should return success response', async () => {
+  // Mock implementation function
+  jest.spyOn(require('../src/unleash/create-feature-flag.js'), 'createFeatureFlag')
+    .mockResolvedValue({
+      name: 'test-flag',
+      project: 'default',
+      enabled: false
+    });
+
+  // Call the handler
+  const response = await handleCreateFlag({
+    name: 'test-flag',
+    project: 'default',
+    description: 'Test flag description'
+  });
+
+  // Verify response structure and content
+  expect(response.content[0].type).toBe('text');
+  const content = JSON.parse(response.content[0].text);
+  expect(content.success).toBe(true);
+  expect(content.message).toContain('Successfully created');
+});
+```
+

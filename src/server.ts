@@ -10,6 +10,7 @@ import { listFlags } from './tools/list-flags.js';
 import { getFeatureTypes } from './tools/get-feature-types.js';
 import { createFlagTool } from './tools/create-flag.js';
 import { addStrategyTool } from './tools/add-strategy.js';
+import { enableFlagTool } from './tools/enable-flag.js';
 import { flagCheckPrompt } from './prompts/flag-check.js';
 import { batchFlagCheckPrompt } from './prompts/batch-flag-check.js';
 import { flagEvaluationPrompt } from './prompts/flag-evaluation.js';
@@ -86,6 +87,13 @@ export function createMcpServer(): McpServer {
     getFeatureTypes.name,
     getFeatureTypes.description,
     getFeatureTypes.handler as any
+  );
+  
+  server.tool(
+    enableFlagTool.name,
+    enableFlagTool.description,
+    enableFlagTool.paramsSchema as any,
+    enableFlagTool.handler as any
   );
   
   // Register prompts
